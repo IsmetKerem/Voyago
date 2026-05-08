@@ -1,0 +1,6 @@
+@Voyago.WebAPI_HostAddress = http://localhost:5025
+
+GET {{Voyago.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
