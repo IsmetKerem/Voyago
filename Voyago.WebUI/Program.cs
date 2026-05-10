@@ -1,7 +1,15 @@
+using Voyago.WebUI.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient<IVoyagoApiClient, VoyagoApiClient>(client =>
+{
+    var baseUrl = builder.Configuration["VoyagoApi:BaseUrl"]
+                  ?? throw new InvalidOperationException("VoyagoApi:BaseUrl not configured");
+    client.BaseAddress = new Uri(baseUrl);
+});
 
 var app = builder.Build();
 

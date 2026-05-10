@@ -1,0 +1,23 @@
+@model Voyago.WebUI.Dtos.WeatherDto
+
+<div class="dashboard-card weather-card">
+    <div class="card-header">
+        <h3>Weather</h3>
+    </div>
+    <div class="card-body">
+        @if (Model is null)
+        {
+            <p class="error-state">Currently unavailable.</p>
+        }
+        else
+        {
+            <div class="weather-temp">
+                @Model.TemperatureCelsius.ToString("0")<span class="temp-unit">°C</span>
+            </div>
+            <div class="weather-meta">
+                <div class="weather-city">@Model.City, @Model.Country</div>
+                <div class="weather-desc">@Model.Description</div>
+            </div>
+        }
+    </div>
+</div>

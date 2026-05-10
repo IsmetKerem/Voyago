@@ -1,8 +1,127 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-container">
+        <div class="hero-content">
+            <span class="hero-eyebrow">Voyago — Travel intelligence</span>
+            <h1 class="hero-title">
+                Discover stays<br>
+                that <em>feel like</em><br>
+                somewhere new.
+            </h1>
+            <p class="hero-subtitle">
+                A quieter way to plan international travel. Live data, hand-picked stays, and the world at your pace.
+            </p>
+            <a href="#search" class="hero-cta">Start searching</a>
+        </div>
+        <div class="hero-image"></div>
+    </div>
+</section>
+
+<!-- SEARCH -->
+<section class="search-section" id="search">
+    <div class="search-section-header">
+        <h2>Find your stay</h2>
+        <p>Enter your destination and dates. We'll handle the rest.</p>
+    </div>
+    
+    <form class="search-form" action="/Hotels" method="get">
+        <div class="search-row">
+            <div class="search-field">
+                <label class="search-label">Destination</label>
+                <input type="text" name="city" class="search-input" placeholder="Milano, Paris, Lisbon…" value="Milano" required />
+            </div>
+            <div class="search-field">
+                <label class="search-label">Check in</label>
+                <input type="date" name="checkIn" class="search-input" required />
+            </div>
+            <div class="search-field">
+                <label class="search-label">Check out</label>
+                <input type="date" name="checkOut" class="search-input" required />
+            </div>
+            <div class="search-field">
+                <label class="search-label">Guests</label>
+                <select name="guests" class="search-input">
+                    <option value="1">1 guest</option>
+                    <option value="2" selected>2 guests</option>
+                    <option value="3">3 guests</option>
+                    <option value="4">4 guests</option>
+                </select>
+            </div>
+            <button type="submit" class="search-submit">Search</button>
+        </div>
+    </form>
+</section>
+
+<!-- DASHBOARD -->
+<section class="dashboard-section">
+    <div class="section-header">
+        <span class="eyebrow">Live around the world</span>
+        <h2>The world, in real time.</h2>
+        <p>A quiet dashboard of conditions, currencies, and culture — pulled live from across the globe.</p>
+    </div>
+    
+    <div class="dashboard-grid">
+        @await Component.InvokeAsync("WeatherCard", new { city = "Paris" })
+        
+        <div class="dashboard-card placeholder-card">
+            <div class="card-header"><h3>Currency</h3></div>
+            <div class="card-body">
+                <div class="placeholder-label">In progress</div>
+                <div class="placeholder-status">Available shortly</div>
+            </div>
+        </div>
+        <div class="dashboard-card placeholder-card">
+            <div class="card-header"><h3>Crypto</h3></div>
+            <div class="card-body">
+                <div class="placeholder-label">In progress</div>
+                <div class="placeholder-status">Available shortly</div>
+            </div>
+        </div>
+        <div class="dashboard-card placeholder-card">
+            <div class="card-header"><h3>News</h3></div>
+            <div class="card-body">
+                <div class="placeholder-label">In progress</div>
+                <div class="placeholder-status">Available shortly</div>
+            </div>
+        </div>
+        <div class="dashboard-card placeholder-card">
+            <div class="card-header"><h3>Food of the day</h3></div>
+            <div class="card-body">
+                <div class="placeholder-label">In progress</div>
+                <div class="placeholder-status">Available shortly</div>
+            </div>
+        </div>
+        <div class="dashboard-card placeholder-card">
+            <div class="card-header"><h3>Country</h3></div>
+            <div class="card-body">
+                <div class="placeholder-label">In progress</div>
+                <div class="placeholder-status">Available shortly</div>
+            </div>
+        </div>
+        <div class="dashboard-card placeholder-card">
+            <div class="card-header"><h3>World time</h3></div>
+            <div class="card-body">
+                <div class="placeholder-label">In progress</div>
+                <div class="placeholder-status">Available shortly</div>
+            </div>
+        </div>
+        <div class="dashboard-card placeholder-card">
+            <div class="card-header"><h3>Football</h3></div>
+            <div class="card-body">
+                <div class="placeholder-label">In progress</div>
+                <div class="placeholder-status">Available shortly</div>
+            </div>
+        </div>
+        <div class="dashboard-card placeholder-card">
+            <div class="card-header"><h3>AI Concierge</h3></div>
+            <div class="card-body">
+                <div class="placeholder-label">In progress</div>
+                <div class="placeholder-status">Available shortly</div>
+            </div>
+        </div>
+    </div>
+</section>
