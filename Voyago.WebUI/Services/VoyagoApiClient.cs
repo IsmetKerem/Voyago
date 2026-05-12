@@ -51,4 +51,25 @@ public class VoyagoApiClient : IVoyagoApiClient
            
         }
     }
+    public async Task<List<NewsDto>> GetTopHeadlinesAsync(int limit = 5)
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync($"api/news/top-headlines?limit={limit}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"[VoyagoApiClient] News API returned status {response.StatusCode}");
+                return new List<NewsDto>();
+            }
+
+            var news = await response.Content.ReadFromJsonAsync<List<NewsDto>>();
+            return news ?? new List<NewsDto>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[VoyagoApiClient] News error: {ex.Message}");
+            return new List<NewsDto>();
+        }
+    }
 }

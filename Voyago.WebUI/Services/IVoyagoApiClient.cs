@@ -8,4 +8,5 @@ public interface IVoyagoApiClient
     Task<WeatherDto?> GetWeatherAsync(string city);
     Task<CurrencyDto?> GetCurrencyAsync();
     Task<CryptoDto?> GetCryptoAsync();
+    Task<List<NewsDto>> GetTopHeadlinesAsync(int limit = 5);
 }
