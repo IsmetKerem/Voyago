@@ -2,21 +2,36 @@
 
 <div class="dashboard-card weather-card">
     <div class="card-header">
-        <h3>Weather</h3>
+        <div class="card-title">
+            <div class="card-icon">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M17.5 19a4.5 4.5 0 1 0 0-9h-1.8A7 7 0 1 0 4 14.9"></path>
+                </svg>
+            </div>
+            <h3>Weather</h3>
+        </div>
+        @if (Model is not null)
+        {
+            <span class="card-status">Live</span>
+        }
     </div>
     <div class="card-body">
         @if (Model is null)
         {
-            <p class="error-state">Currently unavailable.</p>
+            <p class="error-state">Data currently unavailable.</p>
         }
         else
         {
             <div class="weather-temp">
                 @Model.TemperatureCelsius.ToString("0")<span class="temp-unit">°C</span>
             </div>
-            <div class="weather-meta">
-                <div class="weather-city">@Model.City, @Model.Country</div>
-                <div class="weather-desc">@Model.Description</div>
+            <div class="weather-desc">@Model.Description</div>
+            <div class="weather-city">
+                <svg class="icon icon-sm" viewBox="0 0 24 24">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                @Model.City, @Model.Country
             </div>
         }
     </div>

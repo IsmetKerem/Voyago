@@ -1,0 +1,50 @@
+@model Voyago.WebUI.Dtos.CryptoDto
+
+<div class="dashboard-card crypto-card">
+    <div class="card-header">
+        <div class="card-title">
+            <div class="card-icon">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+            </div>
+            <h3>Crypto</h3>
+        </div>
+        @if (Model is not null && Model.Coins.Any())
+        {
+            <span class="card-status">Live</span>
+        }
+    </div>
+    <div class="card-body">
+        @if (Model is null || !Model.Coins.Any())
+        {
+            <p class="error-state">Data currently unavailable.</p>
+        }
+        else
+        {
+            <ul class="crypto-list">
+                @foreach (var coin in Model.Coins)
+                {
+                    var isPositive = coin.ChangePercent >= 0;
+                    var changeClass = isPositive ? "positive" : "negative";
+                    var changeSign = isPositive ? "+" : "";
+                    var priceFormat = coin.Price >= 1 ? "N2" : "N6";
+                    
+                    <li class="crypto-item">
+                        <div class="crypto-left">
+                            <img src="@coin.IconUrl" alt="@coin.Symbol" class="crypto-icon" />
+                            <div class="crypto-meta">
+                                <span class="crypto-symbol">@coin.Symbol</span>
+                                <span class="crypto-name">@coin.Name</span>
+                            </div>
+                        </div>
+                        <div class="crypto-right">
+                            <span class="crypto-price">$@coin.Price.ToString(priceFormat)</span>
+                            <span class="crypto-change @changeClass">@changeSign@coin.ChangePercent.ToString("0.00")%</span>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>

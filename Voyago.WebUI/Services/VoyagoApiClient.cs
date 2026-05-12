@@ -1,4 +1,5 @@
 using Voyago.WebUI.Dtos;
+using Voyago.WebUI.Dtos;
 
 namespace Voyago.WebUI.Services;
 
@@ -21,6 +22,33 @@ public class VoyagoApiClient : IVoyagoApiClient
         catch (HttpRequestException)
         {
             return null;
+        }
+    }
+    public async Task<CurrencyDto?> GetCurrencyAsync()
+    {
+        try
+        {
+            return await _httpClient.GetFromJsonAsync<CurrencyDto>("api/currency");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[VoyagoApiClient] Currency error: {ex.Message}");
+            return null;
+        }
+    }
+
+    public async Task<CryptoDto?> GetCryptoAsync()
+    {
+        try
+        {
+            return await _httpClient.GetFromJsonAsync<CryptoDto>("api/Crypto");
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[VoyagoApiClient] Crypto error: {ex.Message}");
+            return null;
+           
         }
     }
 }
