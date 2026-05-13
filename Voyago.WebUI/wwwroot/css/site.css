@@ -1141,3 +1141,98 @@ button { cursor: pointer; border: none; background: none; }
         font-size: 0.6875rem;
     }
 }
+/* ========================================
+   QUOTE CARD (Daily inspiration)
+   ======================================== */
+
+.quote-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.quote-item {
+    padding: var(--s-3) 0;
+    border-bottom: 1px solid var(--border-soft);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+}
+
+.quote-item:first-child {
+    padding-top: 0;
+}
+
+.quote-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.quote-text {
+    font-size: 0.9375rem;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.55;
+    margin: 0;
+    padding: 0;
+    border-left: 3px solid var(--accent);
+    padding-left: var(--s-3);
+    quotes: "\201C""\201D""\2018""\2019";
+}
+
+.quote-text::before {
+    content: open-quote;
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 2px;
+}
+
+.quote-text::after {
+    content: close-quote;
+    color: var(--accent);
+    font-weight: 700;
+    margin-left: 2px;
+}
+
+.quote-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-2);
+    padding-left: calc(3px + var(--s-3));
+    flex-wrap: wrap;
+}
+
+.quote-author {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text);
+    font-style: normal;
+}
+
+.quote-category {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px var(--s-2);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--primary);
+    background: var(--primary-light);
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .quote-text {
+        font-size: 0.875rem;
+        padding-left: var(--s-2);
+    }
+
+    .quote-meta {
+        padding-left: calc(3px + var(--s-2));
+    }
+}

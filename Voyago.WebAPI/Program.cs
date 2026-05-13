@@ -37,6 +37,14 @@ builder.Services.AddHttpClient<IMovieService, MovieService>(client =>
     client.DefaultRequestHeaders.Add("x-rapidapi-host",
         "imdb236.p.rapidapi.com");
 });
+builder.Services.AddHttpClient<IQuoteService, QuoteService>(client =>
+{
+    client.BaseAddress = new Uri("https://radio-world-75-000-worldwide-fm-radio-stations.p.rapidapi.com/");
+    client.DefaultRequestHeaders.Add("x-rapidapi-key",
+        builder.Configuration["RapidApi:Key"]!);
+    client.DefaultRequestHeaders.Add("x-rapidapi-host",
+        "radio-world-75-000-worldwide-fm-radio-stations.p.rapidapi.com");
+});
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

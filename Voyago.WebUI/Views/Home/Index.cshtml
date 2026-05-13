@@ -113,26 +113,7 @@
         
         @await Component.InvokeAsync("MovieCard")
         
-        
-        <!-- Country -->
-        <div class="dashboard-card placeholder-card">
-            <div class="card-header">
-                <div class="card-title">
-                    <div class="card-icon">
-                        <svg class="icon" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="2" y1="12" x2="22" y2="12"></line>
-                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                        </svg>
-                    </div>
-                    <h3>Country info</h3>
-                </div>
-            </div>
-            <div class="card-body placeholder-body">
-                <div class="placeholder-label">Coming soon</div>
-                <div class="placeholder-status">Capital · currency · language</div>
-            </div>
-        </div>
+        @await Component.InvokeAsync("QuoteCard")
         
         <!-- World Time -->
         <div class="dashboard-card placeholder-card">

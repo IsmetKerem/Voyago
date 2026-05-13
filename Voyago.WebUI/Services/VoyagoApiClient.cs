@@ -84,4 +84,20 @@ public class VoyagoApiClient : IVoyagoApiClient
             return null;
         }
     }
+    public async Task<List<QuoteDto>> GetRandomQuotesAsync(int count = 2)
+    {
+        try
+        {
+            var result = await _httpClient
+                .GetFromJsonAsync<List<QuoteDto>>($"api/quote/random?count={count}");
+
+            return result ?? new List<QuoteDto>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[VoyagoApiClient] Quote error: {ex.Message}");
+            return new List<QuoteDto>();
+        }
+    }
+    
 }

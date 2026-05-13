@@ -10,4 +10,5 @@ public interface IVoyagoApiClient
     Task<CryptoDto?> GetCryptoAsync();
     Task<List<NewsDto>> GetTopHeadlinesAsync(int limit = 5);
     Task<MovieDto?> GetRandomMovieAsync();
+    Task<List<QuoteDto>> GetRandomQuotesAsync(int count = 2);
 }
