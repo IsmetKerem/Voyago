@@ -9,4 +9,5 @@ public interface IVoyagoApiClient
     Task<CurrencyDto?> GetCurrencyAsync();
     Task<CryptoDto?> GetCryptoAsync();
     Task<List<NewsDto>> GetTopHeadlinesAsync(int limit = 5);
+    Task<MovieDto?> GetRandomMovieAsync();
 }

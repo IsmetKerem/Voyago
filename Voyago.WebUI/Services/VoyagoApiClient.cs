@@ -72,4 +72,16 @@ public class VoyagoApiClient : IVoyagoApiClient
             return new List<NewsDto>();
         }
     }
+    public async Task<MovieDto?> GetRandomMovieAsync()
+    {
+        try
+        {
+            return await _httpClient.GetFromJsonAsync<MovieDto>("api/movie/random");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[VoyagoApiClient] Movie error: {ex.Message}");
+            return null;
+        }
+    }
 }

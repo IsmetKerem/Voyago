@@ -1,0 +1,109 @@
+@model Voyago.WebUI.Dtos.MovieDto
+
+<div class="dashboard-card movie-card">
+    <div class="card-header">
+        <div class="card-title">
+            <div class="card-icon">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                    <line x1="7" y1="2" x2="7" y2="22"></line>
+                    <line x1="17" y1="2" x2="17" y2="22"></line>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <line x1="2" y1="7" x2="7" y2="7"></line>
+                    <line x1="2" y1="17" x2="7" y2="17"></line>
+                    <line x1="17" y1="17" x2="22" y2="17"></line>
+                    <line x1="17" y1="7" x2="22" y2="7"></line>
+                </svg>
+            </div>
+            <h3>In-flight pick</h3>
+        </div>
+        @if (Model is not null)
+        {
+            <span class="card-status">Live</span>
+        }
+    </div>
+    <div class="card-body">
+        @if (Model is null)
+        {
+            <p class="error-state">Data currently unavailable.</p>
+        }
+        else
+        {
+            <div class="movie-content">
+                @if (!string.IsNullOrWhiteSpace(Model.PosterUrl))
+                {
+                    <img src="@Model.PosterUrl" alt="@Model.Title" class="movie-poster" loading="lazy" />
+                }
+                else
+                {
+                    <div class="movie-poster movie-poster-fallback">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                            <line x1="7" y1="2" x2="7" y2="22"></line>
+                            <line x1="17" y1="2" x2="17" y2="22"></line>
+                        </svg>
+                    </div>
+                }
+
+                <div class="movie-info">
+                    <h4 class="movie-title">@Model.Title</h4>
+
+                    <div class="movie-meta">
+                        @if (Model.Rating.HasValue)
+                        {
+                            <span class="movie-rating">
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                                @Model.Rating.Value.ToString("0.0")
+                            </span>
+                        }
+                        @if (Model.Year.HasValue)
+                        {
+                            <span class="movie-dot">·</span>
+                            <span class="movie-year">@Model.Year.Value</span>
+                        }
+                        @if (Model.RuntimeMinutes.HasValue)
+                        {
+                            <span class="movie-dot">·</span>
+                            <span class="movie-runtime">@Model.RuntimeFormatted</span>
+                        }
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.GenresFormatted))
+                    {
+                        <div class="movie-genres">@Model.GenresFormatted</div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Description))
+                    {
+                        <p class="movie-description">@Model.Description</p>
+                    }
+
+                    <div class="movie-actions">
+                        @if (!string.IsNullOrWhiteSpace(Model.TrailerUrl))
+                        {
+                            <a href="@Model.TrailerUrl" target="_blank" rel="noopener" class="movie-link">
+                                <svg class="icon icon-sm" viewBox="0 0 24 24">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                                Watch trailer
+                            </a>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.ImdbUrl))
+                        {
+                            <a href="@Model.ImdbUrl" target="_blank" rel="noopener" class="movie-link movie-link-secondary">
+                                IMDb
+                                <svg class="icon icon-sm" viewBox="0 0 24 24">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                    <polyline points="15 3 21 3 21 9"></polyline>
+                                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                                </svg>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

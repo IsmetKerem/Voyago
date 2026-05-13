@@ -29,6 +29,14 @@ builder.Services.AddHttpClient<INewsService, NewsService>(client =>
     client.DefaultRequestHeaders.Add("x-rapidapi-host",
         "real-time-news-data.p.rapidapi.com");
 });
+builder.Services.AddHttpClient<IMovieService, MovieService>(client =>
+{
+    client.BaseAddress = new Uri("https://imdb236.p.rapidapi.com/");
+    client.DefaultRequestHeaders.Add("x-rapidapi-key",
+        builder.Configuration["RapidApi:Key"]!);
+    client.DefaultRequestHeaders.Add("x-rapidapi-host",
+        "imdb236.p.rapidapi.com");
+});
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
