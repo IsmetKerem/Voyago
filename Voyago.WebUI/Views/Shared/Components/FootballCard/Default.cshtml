@@ -1,0 +1,53 @@
+@model List<Voyago.WebUI.Dtos.FootballMatchDto>
+
+<div class="dashboard-card football-card">
+    <div class="card-header">
+        <div class="card-title">
+            <div class="card-icon">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polygon points="12 7 14.5 10.5 13 14 11 14 9.5 10.5 12 7"></polygon>
+                    <line x1="12" y1="2" x2="12" y2="7"></line>
+                    <line x1="14.5" y1="10.5" x2="19" y2="9"></line>
+                    <line x1="13" y1="14" x2="16" y2="18"></line>
+                    <line x1="11" y1="14" x2="8" y2="18"></line>
+                    <line x1="9.5" y1="10.5" x2="5" y2="9"></line>
+                </svg>
+            </div>
+            <h3>Top matches</h3>
+        </div>
+        @if (Model is not null && Model.Any())
+        {
+            <span class="card-status">Live</span>
+        }
+    </div>
+    <div class="card-body">
+        @if (Model is null || !Model.Any())
+        {
+            <p class="error-state">Data currently unavailable.</p>
+        }
+        else
+        {
+            <ul class="football-list">
+                @foreach (var match in Model)
+                {
+                    <li class="football-item">
+                        <div class="football-teams">
+                            <div class="football-team">
+                                <span class="football-team-name">@match.HomeTeam</span>
+                                <span class="football-score">@match.HomeScore</span>
+                            </div>
+                            <div class="football-team">
+                                <span class="football-team-name">@match.AwayTeam</span>
+                                <span class="football-score">@match.AwayScore</span>
+                            </div>
+                        </div>
+                        <div class="football-status">
+                            <span class="football-status-badge @match.StatusClass">@match.StatusLabel</span>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>

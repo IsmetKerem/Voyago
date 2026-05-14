@@ -113,6 +113,21 @@ public class VoyagoApiClient : IVoyagoApiClient
             return null;
         }
     }
+    public async Task<List<FootballMatchDto>> GetTopMatchesAsync(int count = 4)
+    {
+        try
+        {
+            var result = await _httpClient
+                .GetFromJsonAsync<List<FootballMatchDto>>($"api/football/top-matches?count={count}");
+
+            return result ?? new List<FootballMatchDto>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[VoyagoApiClient] Football error: {ex.Message}");
+            return new List<FootballMatchDto>();
+        }
+    }
     
     
 }

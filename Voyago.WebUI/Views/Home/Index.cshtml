@@ -117,24 +117,7 @@
         
         @await Component.InvokeAsync("AirQualityCard", new { city = "Paris" })
         
-        <!-- Football -->
-        <div class="dashboard-card placeholder-card">
-            <div class="card-header">
-                <div class="card-title">
-                    <div class="card-icon">
-                        <svg class="icon" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M12 2v20M2 12h20"></path>
-                        </svg>
-                    </div>
-                    <h3>Football</h3>
-                </div>
-            </div>
-            <div class="card-body placeholder-body">
-                <div class="placeholder-label">Coming soon</div>
-                <div class="placeholder-status">Match scores and standings</div>
-            </div>
-        </div>
+        @await Component.InvokeAsync("FootballCard")
         
         <!-- AI -->
         <div class="dashboard-card placeholder-card">

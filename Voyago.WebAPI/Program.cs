@@ -53,6 +53,14 @@ builder.Services.AddHttpClient<IAirQualityService, AirQualityService>(client =>
     client.DefaultRequestHeaders.Add("x-rapidapi-host",
         "air-quality-by-api-ninjas.p.rapidapi.com");
 });
+builder.Services.AddHttpClient<IFootballService, FootballService>(client =>
+{
+    client.BaseAddress = new Uri("https://free-api-live-football-data.p.rapidapi.com/");
+    client.DefaultRequestHeaders.Add("x-rapidapi-key",
+        builder.Configuration["RapidApi:Key"]!);
+    client.DefaultRequestHeaders.Add("x-rapidapi-host",
+        "free-api-live-football-data.p.rapidapi.com");
+});
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

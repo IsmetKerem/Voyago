@@ -1375,3 +1375,142 @@ button { cursor: pointer; border: none; background: none; }
         font-size: 2.5rem;
     }
 }
+/* ========================================
+   FOOTBALL CARD (Top matches list)
+   ======================================== */
+
+.football-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.football-item {
+    padding: var(--s-3) 0;
+    border-bottom: 1px solid var(--border-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--s-3);
+}
+
+.football-item:first-child {
+    padding-top: 0;
+}
+
+.football-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.football-teams {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.football-team {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--s-2);
+}
+
+.football-team-name {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    flex: 1;
+}
+
+.football-score {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    min-width: 16px;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.football-status {
+    flex-shrink: 0;
+}
+
+.football-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px var(--s-2);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Match status renk paleti */
+.match-live {
+    background: #d4edda;
+    color: #155724;
+    position: relative;
+    padding-left: 18px;
+}
+
+.match-live::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #28a745;
+    animation: pulse-live 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-live {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.match-finished {
+    background: var(--bg-soft);
+    color: var(--text-light);
+}
+
+.match-upcoming {
+    background: #e7f1ff;
+    color: #0a4275;
+}
+
+.match-postponed {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.match-unknown {
+    background: var(--bg-soft);
+    color: var(--text-faded);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .football-team-name {
+        font-size: 0.75rem;
+    }
+
+    .football-score {
+        font-size: 0.875rem;
+    }
+}
