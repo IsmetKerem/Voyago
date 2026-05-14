@@ -1,0 +1,74 @@
+@model Voyago.WebUI.Dtos.HotelSummaryDto
+
+<article class="hotel-card">
+    <!-- Photo -->
+    <div class="hotel-card-photo-wrapper">
+        @if (!string.IsNullOrWhiteSpace(Model.PhotoUrl))
+        {
+            <img src="@Model.PhotoUrl"
+                 alt="@Model.Name"
+                 class="hotel-card-photo"
+                 loading="lazy" />
+        }
+        else
+        {
+            <div class="hotel-card-photo hotel-card-photo-fallback">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"></path>
+                </svg>
+            </div>
+        }
+        @if (Model.IsPreferred)
+        {
+            <span class="hotel-badge hotel-badge-preferred">Preferred</span>
+        }
+        @if (Model.DiscountPercent.HasValue)
+        {
+            <span class="hotel-badge hotel-badge-discount">−@Model.DiscountPercent%</span>
+        }
+    </div>
+
+    <!-- Info -->
+    <div class="hotel-card-info">
+        <div class="hotel-card-header">
+            <h3 class="hotel-card-name">@Model.Name</h3>
+            @if (Model.StarRating > 0)
+            {
+                <div class="hotel-card-stars" aria-label="@Model.StarRating star rating">
+                    @for (int i = 0; i < Model.StarRating; i++)
+                    {
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                    }
+                </div>
+            }
+            <p class="hotel-card-location">@Model.City</p>
+        </div>
+
+        <div class="hotel-card-footer">
+            <div class="hotel-card-review">
+                <div class="hotel-card-review-score @Model.ReviewScoreClass">
+                    @Model.ReviewScoreFormatted
+                </div>
+                <div class="hotel-card-review-text">
+                    <div class="hotel-card-review-word">@Model.ReviewScoreWord</div>
+                    <div class="hotel-card-review-count">@Model.ReviewCount reviews</div>
+                </div>
+            </div>
+
+            <div class="hotel-card-price">
+                @if (Model.OriginalPriceRounded.HasValue && Model.DiscountPercent.HasValue)
+                {
+                    <span class="hotel-card-price-original">
+                        @Model.CurrencySymbol@Model.OriginalPriceRounded
+                    </span>
+                }
+                <span class="hotel-card-price-current">
+                    @Model.CurrencySymbol@Model.PriceRounded
+                </span>
+                <span class="hotel-card-price-note">per stay</span>
+            </div>
+        </div>
+    </div>
+</article>

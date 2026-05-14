@@ -61,6 +61,16 @@ builder.Services.AddHttpClient<IFootballService, FootballService>(client =>
     client.DefaultRequestHeaders.Add("x-rapidapi-host",
         "free-api-live-football-data.p.rapidapi.com");
 });
+builder.Services.AddHttpClient<IBookingService, BookingService>(client =>
+{
+    client.BaseAddress = new Uri("https://booking-com15.p.rapidapi.com/");
+    client.DefaultRequestHeaders.Add("x-rapidapi-key",
+        builder.Configuration["RapidApi:Key"]!);
+    client.DefaultRequestHeaders.Add("x-rapidapi-host",
+        "booking-com15.p.rapidapi.com");
+
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

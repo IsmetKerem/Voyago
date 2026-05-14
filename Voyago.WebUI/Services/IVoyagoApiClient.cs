@@ -13,4 +13,5 @@ public interface IVoyagoApiClient
     Task<List<QuoteDto>> GetRandomQuotesAsync(int count = 2);
     Task<AirQualityDto?> GetAirQualityAsync(string city);
     Task<List<FootballMatchDto>> GetTopMatchesAsync(int count = 4);
+    Task<HotelSearchResponseDto?> SearchHotelsAsync(HotelSearchRequest request);
 }

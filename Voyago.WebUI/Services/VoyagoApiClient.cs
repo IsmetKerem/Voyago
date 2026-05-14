@@ -128,6 +128,47 @@ public class VoyagoApiClient : IVoyagoApiClient
             return new List<FootballMatchDto>();
         }
     }
+    public async Task<HotelSearchResponseDto?> SearchHotelsAsync(HotelSearchRequest request)
+    {
+        try
+        {
+            var queryParams = new List<string>
+            {
+                $"destination={Uri.EscapeDataString(request.Destination)}",
+                $"arrivalDate={Uri.EscapeDataString(request.ArrivalDate)}",
+                $"departureDate={Uri.EscapeDataString(request.DepartureDate)}",
+                $"adults={request.Adults}",
+                $"children={request.Children}",
+                $"rooms={request.Rooms}",
+                $"pageNumber={request.PageNumber}"
+            };
+
+            if (request.MinPrice.HasValue)
+                queryParams.Add($"minPrice={request.MinPrice.Value}");
+
+            if (request.MaxPrice.HasValue)
+                queryParams.Add($"maxPrice={request.MaxPrice.Value}");
+
+            if (request.StarRatings is { Count: > 0 })
+            {
+                foreach (var star in request.StarRatings)
+                    queryParams.Add($"starRatings={star}");
+            }
+
+            if (request.MinReviewScore.HasValue)
+                queryParams.Add($"minReviewScore={request.MinReviewScore.Value}");
+
+            var queryString = string.Join("&", queryParams);
+            var url = $"api/booking/search?{queryString}";
+
+            return await _httpClient.GetFromJsonAsync<HotelSearchResponseDto>(url);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[VoyagoApiClient] SearchHotels error: {ex.Message}");
+            return null;
+        }
+    }
     
     
 }
