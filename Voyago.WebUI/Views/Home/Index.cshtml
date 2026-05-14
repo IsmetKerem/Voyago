@@ -115,24 +115,7 @@
         
         @await Component.InvokeAsync("QuoteCard")
         
-        <!-- World Time -->
-        <div class="dashboard-card placeholder-card">
-            <div class="card-header">
-                <div class="card-title">
-                    <div class="card-icon">
-                        <svg class="icon" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                    </div>
-                    <h3>World time</h3>
-                </div>
-            </div>
-            <div class="card-body placeholder-body">
-                <div class="placeholder-label">Coming soon</div>
-                <div class="placeholder-status">Time across time zones</div>
-            </div>
-        </div>
+        @await Component.InvokeAsync("AirQualityCard", new { city = "Paris" })
         
         <!-- Football -->
         <div class="dashboard-card placeholder-card">

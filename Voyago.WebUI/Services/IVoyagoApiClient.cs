@@ -11,4 +11,5 @@ public interface IVoyagoApiClient
     Task<List<NewsDto>> GetTopHeadlinesAsync(int limit = 5);
     Task<MovieDto?> GetRandomMovieAsync();
     Task<List<QuoteDto>> GetRandomQuotesAsync(int count = 2);
+    Task<AirQualityDto?> GetAirQualityAsync(string city);
 }

@@ -1236,3 +1236,142 @@ button { cursor: pointer; border: none; background: none; }
         padding-left: calc(3px + var(--s-2));
     }
 }
+/* ========================================
+   AIR QUALITY CARD (Featured layout)
+   ======================================== */
+
+.airquality-card .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-4);
+}
+
+/* HERO SECTION */
+.airquality-hero {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-1);
+}
+
+.aqi-value-row {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+}
+
+.aqi-value {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+}
+
+.aqi-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--s-1) var(--s-2);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+}
+
+/* AQI category renk paleti — EPA standardı */
+.aqi-good {
+    background: #d4edda;
+    color: #155724;
+}
+
+.aqi-moderate {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.aqi-sensitive {
+    background: #ffe5b4;
+    color: #8a4500;
+}
+
+.aqi-unhealthy {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.aqi-very-unhealthy {
+    background: #e2d4f0;
+    color: #4a148c;
+}
+
+.aqi-hazardous {
+    background: #5c1a1a;
+    color: #ffffff;
+}
+
+.aqi-city {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.aqi-advice {
+    font-size: 0.8125rem;
+    color: var(--text);
+    line-height: 1.5;
+    margin: 0;
+    padding-top: var(--s-2);
+}
+
+/* DETAILS SECTION */
+.aqi-details {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--border-soft);
+    padding-top: var(--s-3);
+}
+
+.aqi-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: var(--s-2) 0;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.aqi-detail-row:last-child {
+    border-bottom: none;
+}
+
+.aqi-pollutant {
+    font-size: 0.8125rem;
+    color: var(--text);
+    font-weight: 600;
+}
+
+.aqi-pollutant-value {
+    font-size: 0.875rem;
+    color: var(--ink);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.aqi-unit {
+    font-size: 0.6875rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .aqi-value {
+        font-size: 2.5rem;
+    }
+}

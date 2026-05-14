@@ -99,5 +99,20 @@ public class VoyagoApiClient : IVoyagoApiClient
             return new List<QuoteDto>();
         }
     }
+    public async Task<AirQualityDto?> GetAirQualityAsync(string city)
+    {
+        try
+        {
+            var encodedCity = Uri.EscapeDataString(city);
+            return await _httpClient
+                .GetFromJsonAsync<AirQualityDto>($"api/airquality?city={encodedCity}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[VoyagoApiClient] AirQuality error: {ex.Message}");
+            return null;
+        }
+    }
+    
     
 }

@@ -1,0 +1,66 @@
+@model Voyago.WebUI.Dtos.AirQualityDto
+
+<div class="dashboard-card airquality-card">
+    <div class="card-header">
+        <div class="card-title">
+            <div class="card-icon">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path>
+                </svg>
+            </div>
+            <h3>Air quality</h3>
+        </div>
+        @if (Model is not null)
+        {
+            <span class="card-status">Live</span>
+        }
+    </div>
+    <div class="card-body">
+        @if (Model is null)
+        {
+            <p class="error-state">Data currently unavailable.</p>
+        }
+        else
+        {
+            <div class="airquality-hero">
+                <div class="aqi-value-row">
+                    <span class="aqi-value">@Model.OverallAqi</span>
+                    <span class="aqi-badge @Model.AqiColorClass">@Model.AqiCategory</span>
+                </div>
+                <div class="aqi-city">@Model.City</div>
+                <p class="aqi-advice">@Model.AqiAdvice</p>
+            </div>
+
+            <ul class="aqi-details">
+                <li class="aqi-detail-row">
+                    <span class="aqi-pollutant">PM2.5</span>
+                    <span class="aqi-pollutant-value">
+                        @Model.Pm25Concentration.ToString("0.0")
+                        <span class="aqi-unit">μg/m³</span>
+                    </span>
+                </li>
+                <li class="aqi-detail-row">
+                    <span class="aqi-pollutant">PM10</span>
+                    <span class="aqi-pollutant-value">
+                        @Model.Pm10Concentration.ToString("0.0")
+                        <span class="aqi-unit">μg/m³</span>
+                    </span>
+                </li>
+                <li class="aqi-detail-row">
+                    <span class="aqi-pollutant">O3</span>
+                    <span class="aqi-pollutant-value">
+                        @Model.O3Concentration.ToString("0.0")
+                        <span class="aqi-unit">μg/m³</span>
+                    </span>
+                </li>
+                <li class="aqi-detail-row">
+                    <span class="aqi-pollutant">NO2</span>
+                    <span class="aqi-pollutant-value">
+                        @Model.No2Concentration.ToString("0.0")
+                        <span class="aqi-unit">μg/m³</span>
+                    </span>
+                </li>
+            </ul>
+        }
+    </div>
+</div>

@@ -45,6 +45,14 @@ builder.Services.AddHttpClient<IQuoteService, QuoteService>(client =>
     client.DefaultRequestHeaders.Add("x-rapidapi-host",
         "radio-world-75-000-worldwide-fm-radio-stations.p.rapidapi.com");
 });
+builder.Services.AddHttpClient<IAirQualityService, AirQualityService>(client =>
+{
+    client.BaseAddress = new Uri("https://air-quality-by-api-ninjas.p.rapidapi.com/");
+    client.DefaultRequestHeaders.Add("x-rapidapi-key",
+        builder.Configuration["RapidApi:Key"]!);
+    client.DefaultRequestHeaders.Add("x-rapidapi-host",
+        "air-quality-by-api-ninjas.p.rapidapi.com");
+});
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
