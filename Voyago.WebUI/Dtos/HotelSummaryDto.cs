@@ -52,4 +52,23 @@ public class HotelSummaryDto
         "GBP" => "£",
         _ => Currency 
     };
+    // Booking.com search URL — kullanıcıyı oteli aratılmış olarak götürür
+    public string BuildBookingUrl(string? arrivalDate, string? departureDate, int adults, int rooms)
+    {
+        var query = new List<string>
+        {
+            $"ss={Uri.EscapeDataString(Name)}"
+        };
+
+        if (!string.IsNullOrWhiteSpace(arrivalDate))
+            query.Add($"checkin={Uri.EscapeDataString(arrivalDate)}");
+
+        if (!string.IsNullOrWhiteSpace(departureDate))
+            query.Add($"checkout={Uri.EscapeDataString(departureDate)}");
+
+        query.Add($"group_adults={adults}");
+        query.Add($"no_rooms={rooms}");
+
+        return $"https://www.booking.com/searchresults.html?{string.Join("&", query)}";
+    }
 }

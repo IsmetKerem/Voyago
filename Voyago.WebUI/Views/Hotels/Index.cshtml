@@ -65,11 +65,127 @@
     <!-- Main: sidebar + results -->
     <div class="hotels-layout">
         <aside class="hotels-sidebar">
+    <form method="get" action="/Hotels" class="filter-form">
+        <!-- Hidden inputs: search context'i koru (destination, tarihler, kişi) -->
+        <input type="hidden" name="destination" value="@searchRequest?.Destination" />
+        <input type="hidden" name="arrivalDate" value="@searchRequest?.ArrivalDate" />
+        <input type="hidden" name="departureDate" value="@searchRequest?.DepartureDate" />
+        <input type="hidden" name="adults" value="@(searchRequest?.Adults ?? 2)" />
+        <input type="hidden" name="children" value="@(searchRequest?.Children ?? 0)" />
+        <input type="hidden" name="rooms" value="@(searchRequest?.Rooms ?? 1)" />
+
+        <div class="filter-header">
             <h3 class="hotels-sidebar-title">Filters</h3>
-            <p class="hotels-sidebar-placeholder">
-                Filters coming soon — narrow down results by price, stars, and review score.
-            </p>
-        </aside>
+            @if (searchRequest?.MinPrice.HasValue == true ||
+                 searchRequest?.MaxPrice.HasValue == true ||
+                 (searchRequest?.StarRatings?.Count > 0) ||
+                 searchRequest?.MinReviewScore.HasValue == true)
+            {
+                <a href="@Url.Action("Index", new {
+                    destination = searchRequest?.Destination,
+                    arrivalDate = searchRequest?.ArrivalDate,
+                    departureDate = searchRequest?.DepartureDate,
+                    adults = searchRequest?.Adults,
+                    children = searchRequest?.Children,
+                    rooms = searchRequest?.Rooms
+                })" class="filter-clear-link">Clear all</a>
+            }
+        </div>
+
+        <!-- PRICE FILTER -->
+        <div class="filter-group">
+            <h4 class="filter-group-title">Price per stay ($)</h4>
+            <div class="filter-price-row">
+                <div class="filter-price-field">
+                    <label for="minPrice">Min</label>
+                    <input type="number"
+                           id="minPrice"
+                           name="minPrice"
+                           value="@searchRequest?.MinPrice"
+                           min="0"
+                           placeholder="0" />
+                </div>
+                <span class="filter-price-dash">–</span>
+                <div class="filter-price-field">
+                    <label for="maxPrice">Max</label>
+                    <input type="number"
+                           id="maxPrice"
+                           name="maxPrice"
+                           value="@searchRequest?.MaxPrice"
+                           min="0"
+                           placeholder="∞" />
+                </div>
+            </div>
+        </div>
+
+        <!-- STAR RATING FILTER -->
+        <div class="filter-group">
+            <h4 class="filter-group-title">Star rating</h4>
+            <div class="filter-checkbox-list">
+                @{
+                    var selectedStars = searchRequest?.StarRatings ?? new List<int>();
+                }
+                @for (int star = 5; star >= 1; star--)
+                {
+                    <label class="filter-checkbox">
+                        <input type="checkbox"
+                               name="starRatings"
+                               value="@star"
+                               @(selectedStars.Contains(star) ? "checked" : "") />
+                        <span class="filter-checkbox-label">
+                            @for (int i = 0; i < star; i++)
+                            {
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                            }
+                        </span>
+                    </label>
+                }
+            </div>
+        </div>
+
+        <!-- REVIEW SCORE FILTER -->
+        <div class="filter-group">
+            <h4 class="filter-group-title">Review score</h4>
+            <div class="filter-radio-list">
+                <label class="filter-radio">
+                    <input type="radio"
+                           name="minReviewScore"
+                           value=""
+                           @(!searchRequest?.MinReviewScore.HasValue == true ? "checked" : "") />
+                    <span>Any</span>
+                </label>
+                <label class="filter-radio">
+                    <input type="radio"
+                           name="minReviewScore"
+                           value="90"
+                           @(searchRequest?.MinReviewScore == 90 ? "checked" : "") />
+                    <span>Wonderful: 9+</span>
+                </label>
+                <label class="filter-radio">
+                    <input type="radio"
+                           name="minReviewScore"
+                           value="80"
+                           @(searchRequest?.MinReviewScore == 80 ? "checked" : "") />
+                    <span>Very good: 8+</span>
+                </label>
+                <label class="filter-radio">
+                    <input type="radio"
+                           name="minReviewScore"
+                           value="70"
+                           @(searchRequest?.MinReviewScore == 70 ? "checked" : "") />
+                    <span>Good: 7+</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- APPLY BUTTON -->
+        <button type="submit" class="filter-apply-btn">
+            Apply filters
+        </button>
+    </form>
+</aside>
 
         <main class="hotels-results">
             @if (Model is null)
@@ -91,6 +207,36 @@
                 <div class="hotels-header">
                     <h1 class="hotels-title">@Model.DestinationName</h1>
                     <p class="hotels-count">@Model.TotalCount properties found</p>
+
+                    @{
+                        var activeFilters = new List<string>();
+                        if (searchRequest?.MinPrice.HasValue == true || searchRequest?.MaxPrice.HasValue == true)
+                        {
+                            var min = searchRequest.MinPrice?.ToString("0") ?? "0";
+                            var max = searchRequest.MaxPrice?.ToString("0") ?? "∞";
+                            activeFilters.Add($"${min} – ${max}");
+                        }
+                        if (searchRequest?.StarRatings?.Count > 0)
+                        {
+                            var stars = string.Join(", ", searchRequest.StarRatings.OrderByDescending(s => s).Select(s => $"{s}★"));
+                            activeFilters.Add(stars);
+                        }
+                        if (searchRequest?.MinReviewScore.HasValue == true)
+                        {
+                            activeFilters.Add($"Score {searchRequest.MinReviewScore / 10.0:0.0}+");
+                        }
+                    }
+
+                    @if (activeFilters.Any())
+                    {
+                        <div class="hotels-active-filters">
+                            <span class="hotels-active-label">Filters:</span>
+                            @foreach (var filter in activeFilters)
+                            {
+                                <span class="hotels-filter-tag">@filter</span>
+                            }
+                        </div>
+                    }
                 </div>
 
                 <div class="hotels-list">

@@ -1,74 +1,97 @@
 @model Voyago.WebUI.Dtos.HotelSummaryDto
 
-<article class="hotel-card">
-    <!-- Photo -->
-    <div class="hotel-card-photo-wrapper">
-        @if (!string.IsNullOrWhiteSpace(Model.PhotoUrl))
-        {
-            <img src="@Model.PhotoUrl"
-                 alt="@Model.Name"
-                 class="hotel-card-photo"
-                 loading="lazy" />
-        }
-        else
-        {
-            <div class="hotel-card-photo hotel-card-photo-fallback">
-                <svg class="icon" viewBox="0 0 24 24">
-                    <path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"></path>
-                </svg>
-            </div>
-        }
-        @if (Model.IsPreferred)
-        {
-            <span class="hotel-badge hotel-badge-preferred">Preferred</span>
-        }
-        @if (Model.DiscountPercent.HasValue)
-        {
-            <span class="hotel-badge hotel-badge-discount">−@Model.DiscountPercent%</span>
-        }
-    </div>
+@{
+    // ViewBag'den search request'i al — Booking URL için tarih ve kişi sayısı lazım
+    var searchRequest = ViewBag.SearchRequest as Voyago.WebUI.Dtos.HotelSearchRequest;
+    var bookingUrl = Model.BuildBookingUrl(
+        searchRequest?.ArrivalDate,
+        searchRequest?.DepartureDate,
+        searchRequest?.Adults ?? 2,
+        searchRequest?.Rooms ?? 1
+    );
+}
 
-    <!-- Info -->
-    <div class="hotel-card-info">
-        <div class="hotel-card-header">
-            <h3 class="hotel-card-name">@Model.Name</h3>
-            @if (Model.StarRating > 0)
+<a href="@bookingUrl"
+   target="_blank"
+   rel="noopener noreferrer"
+   class="hotel-card-link"
+   title="View @Model.Name on Booking.com">
+    <article class="hotel-card">
+        <!-- Photo -->
+        <div class="hotel-card-photo-wrapper">
+            @if (!string.IsNullOrWhiteSpace(Model.PhotoUrl))
             {
-                <div class="hotel-card-stars" aria-label="@Model.StarRating star rating">
-                    @for (int i = 0; i < Model.StarRating; i++)
-                    {
-                        <svg class="icon icon-sm" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                    }
+                <img src="@Model.PhotoUrl"
+                     alt="@Model.Name"
+                     class="hotel-card-photo"
+                     loading="lazy" />
+            }
+            else
+            {
+                <div class="hotel-card-photo hotel-card-photo-fallback">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"></path>
+                    </svg>
                 </div>
             }
-            <p class="hotel-card-location">@Model.City</p>
+            @if (Model.IsPreferred)
+            {
+                <span class="hotel-badge hotel-badge-preferred">Preferred</span>
+            }
+            @if (Model.DiscountPercent.HasValue)
+            {
+                <span class="hotel-badge hotel-badge-discount">−@Model.DiscountPercent%</span>
+            }
         </div>
 
-        <div class="hotel-card-footer">
-            <div class="hotel-card-review">
-                <div class="hotel-card-review-score @Model.ReviewScoreClass">
-                    @Model.ReviewScoreFormatted
-                </div>
-                <div class="hotel-card-review-text">
-                    <div class="hotel-card-review-word">@Model.ReviewScoreWord</div>
-                    <div class="hotel-card-review-count">@Model.ReviewCount reviews</div>
-                </div>
-            </div>
-
-            <div class="hotel-card-price">
-                @if (Model.OriginalPriceRounded.HasValue && Model.DiscountPercent.HasValue)
+        <!-- Info -->
+        <div class="hotel-card-info">
+            <div class="hotel-card-header">
+                <h3 class="hotel-card-name">@Model.Name</h3>
+                @if (Model.StarRating > 0)
                 {
-                    <span class="hotel-card-price-original">
-                        @Model.CurrencySymbol@Model.OriginalPriceRounded
-                    </span>
+                    <div class="hotel-card-stars" aria-label="@Model.StarRating star rating">
+                        @for (int i = 0; i < Model.StarRating; i++)
+                        {
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                        }
+                    </div>
                 }
-                <span class="hotel-card-price-current">
-                    @Model.CurrencySymbol@Model.PriceRounded
-                </span>
-                <span class="hotel-card-price-note">per stay</span>
+                <p class="hotel-card-location">@Model.City</p>
+            </div>
+
+            <div class="hotel-card-footer">
+                <div class="hotel-card-review">
+                    <div class="hotel-card-review-score @Model.ReviewScoreClass">
+                        @Model.ReviewScoreFormatted
+                    </div>
+                    <div class="hotel-card-review-text">
+                        <div class="hotel-card-review-word">@Model.ReviewScoreWord</div>
+                        <div class="hotel-card-review-count">@Model.ReviewCount reviews</div>
+                    </div>
+                </div>
+
+                <div class="hotel-card-price">
+                    @if (Model.OriginalPriceRounded.HasValue && Model.DiscountPercent.HasValue)
+                    {
+                        <span class="hotel-card-price-original">
+                            @Model.CurrencySymbol@Model.OriginalPriceRounded
+                        </span>
+                    }
+                    <span class="hotel-card-price-current">
+                        @Model.CurrencySymbol@Model.PriceRounded
+                    </span>
+                    <span class="hotel-card-price-note">per stay</span>
+                    <span class="hotel-card-view-link">
+                        View on Booking
+                        <svg class="icon icon-sm" viewBox="0 0 24 24">
+                            <path d="M5 12h14M13 5l7 7-7 7"></path>
+                        </svg>
+                    </span>
+                </div>
             </div>
         </div>
-    </div>
-</article>
+    </article>
+</a>

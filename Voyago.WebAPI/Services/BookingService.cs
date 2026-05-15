@@ -62,7 +62,6 @@ public class BookingService : IBookingService
         if (data?.Data is null || data.Data.Count == 0)
             return null;
 
- 
         var preferred = data.Data
             .FirstOrDefault(d => d.DestType == "city")
             ?? data.Data.First();
@@ -77,6 +76,7 @@ public class BookingService : IBookingService
         RapidDestinationDto destination,
         HotelSearchRequest request)
     {
+        // ---- Date validation ----
         if (!DateOnly.TryParse(request.ArrivalDate, CultureInfo.InvariantCulture, out var arrival))
         {
             arrival = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(7));
@@ -99,6 +99,7 @@ public class BookingService : IBookingService
 
         var searchType = destination.SearchType?.ToUpperInvariant() ?? "CITY";
 
+        // ---- Base query parameters ----
         var queryParams = new Dictionary<string, string>
         {
             ["dest_id"] = destination.DestId ?? string.Empty,
@@ -114,33 +115,62 @@ public class BookingService : IBookingService
             ["currency_code"] = "USD"
         };
 
-
         if (request.Children > 0)
         {
             var childAges = string.Join(",", Enumerable.Repeat("7", request.Children));
             queryParams["children_age"] = childAges;
         }
 
-        if (request.MinPrice.HasValue && request.MaxPrice.HasValue)
+        // ============================================================
+        // OPTIONAL FILTERS — Booking-com15 specific
+        // ============================================================
+        // Booking-com15 filter sistemi tek "categories_filter" parametresi alır,
+        // içinde "type::value" formatında multi-value string.
+        // Örnek: categories_filter=price::USD-100-500,class::5,class::4
+        // ============================================================
+
+        var categoryFilters = new List<string>();
+
+        // PRICE filter — Format: price::USD-{min}-{max}
+        // Booking min/max ikisini de bekler. Tek taraf verilmişse default kullan.
+        if (request.MinPrice.HasValue || request.MaxPrice.HasValue)
         {
-            queryParams["price_min"] = request.MinPrice.Value.ToString("0", CultureInfo.InvariantCulture);
-            queryParams["price_max"] = request.MaxPrice.Value.ToString("0", CultureInfo.InvariantCulture);
+            var min = request.MinPrice?.ToString("0", CultureInfo.InvariantCulture) ?? "1";
+            var max = request.MaxPrice?.ToString("0", CultureInfo.InvariantCulture) ?? "99999";
+            categoryFilters.Add($"price::USD-{min}-{max}");
         }
 
+        // STAR RATING filter — her yıldız ayrı entry
+        // Format: class::5, class::4 (ayrı entries)
         if (request.StarRatings is { Count: > 0 })
         {
-            queryParams["class"] = string.Join(",", request.StarRatings);
+            foreach (var star in request.StarRatings)
+            {
+                categoryFilters.Add($"class::{star}");
+            }
         }
 
+        // Tüm category filter'lar tek parametrede virgülle ayrılır
+        if (categoryFilters.Count > 0)
+        {
+            queryParams["categories_filter"] = string.Join(",", categoryFilters);
+        }
+
+        // REVIEW SCORE — ayrı parametre
+        // 70 = 7+, 80 = 8+, 90 = 9+
         if (request.MinReviewScore.HasValue)
         {
             queryParams["review_score"] = request.MinReviewScore.Value.ToString();
         }
 
+        // ---- Build URL ----
         var queryString = string.Join("&", queryParams
             .Select(kv => $"{kv.Key}={Uri.EscapeDataString(kv.Value)}"));
 
         var url = $"api/v1/hotels/searchHotels?{queryString}";
+
+        // DEBUG log — Booking'e giden tam URL
+        _logger.LogInformation("Booking URL: {Url}", url);
 
         var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
@@ -159,10 +189,20 @@ public class BookingService : IBookingService
 
         var totalCount = ParseTotalCount(data.Data.Meta);
 
+        // ============================================================
+        // CLIENT-SIDE FILTER VALIDATION
+        // Booking API filter'ları bazen yanlış yorumluyor.
+        // Defensive — bizim de tarafımızda extra filter uygula.
+        // ============================================================
         var hotels = data.Data.Hotels
             .Where(h => h.Property is not null)
             .Select(MapToSummaryDto)
+            .Where(h => MatchesFilters(h, request))
             .ToList();
+
+        _logger.LogInformation(
+            "Hotels fetched: API returned {ApiCount}, after client filter {FinalCount}",
+            data.Data.Hotels.Count, hotels.Count);
 
         return new HotelSearchResponseDto
         {
@@ -173,11 +213,40 @@ public class BookingService : IBookingService
         };
     }
 
+    /// <summary>
+    /// Client-side filter check — API'nin filter eksik uygulaması ihtimaline karşı
+    /// her hotel'i tekrar süzeriz. Defensive design.
+    /// </summary>
+    private static bool MatchesFilters(HotelSummaryDto hotel, HotelSearchRequest request)
+    {
+        // Price range
+        if (request.MinPrice.HasValue && hotel.Price < request.MinPrice.Value)
+            return false;
+
+        if (request.MaxPrice.HasValue && hotel.Price > request.MaxPrice.Value)
+            return false;
+
+        // Star rating
+        if (request.StarRatings is { Count: > 0 } &&
+            !request.StarRatings.Contains(hotel.StarRating))
+            return false;
+
+        // Review score (API: 70, 80, 90 — DTO: 7.0, 8.0, 9.0)
+        if (request.MinReviewScore.HasValue)
+        {
+            var threshold = request.MinReviewScore.Value / 10.0;
+            if (hotel.ReviewScore < threshold)
+                return false;
+        }
+
+        return true;
+    }
+
     private static int ParseTotalCount(List<RapidMetaDto>? meta)
     {
         if (meta is null || meta.Count == 0) return 0;
 
-        var title = meta[0].Title;  
+        var title = meta[0].Title;
         if (string.IsNullOrWhiteSpace(title)) return 0;
 
         var firstWord = title.Split(' ').FirstOrDefault();
