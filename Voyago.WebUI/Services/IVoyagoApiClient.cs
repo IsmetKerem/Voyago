@@ -14,4 +14,5 @@ public interface IVoyagoApiClient
     Task<AirQualityDto?> GetAirQualityAsync(string city);
     Task<List<FootballMatchDto>> GetTopMatchesAsync(int count = 4);
     Task<HotelSearchResponseDto?> SearchHotelsAsync(HotelSearchRequest request);
+    Task<AIResponseDto?> AskAiAsync(string question);
 }

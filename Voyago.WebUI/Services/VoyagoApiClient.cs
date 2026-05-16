@@ -169,6 +169,27 @@ public class VoyagoApiClient : IVoyagoApiClient
             return null;
         }
     }
+    public async Task<AIResponseDto?> AskAiAsync(string question)
+    {
+        try
+        {
+            var request = new AskAIRequest { Question = question };
+            var response = await _httpClient.PostAsJsonAsync("api/ai/ask", request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"[VoyagoApiClient] AI ask returned {response.StatusCode}");
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<AIResponseDto>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[VoyagoApiClient] AI ask error: {ex.Message}");
+            return null;
+        }
+    }
     
     
 }

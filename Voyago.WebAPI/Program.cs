@@ -71,6 +71,12 @@ builder.Services.AddHttpClient<IBookingService, BookingService>(client =>
 
     client.Timeout = TimeSpan.FromSeconds(30);
 });
+
+builder.Services.AddHttpClient<IAiService, OpenAiService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.openai.com/");
+    client.Timeout = TimeSpan.FromSeconds(60);
+});
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

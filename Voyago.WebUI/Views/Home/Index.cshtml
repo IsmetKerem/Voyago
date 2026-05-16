@@ -126,8 +126,8 @@
         @await Component.InvokeAsync("AirQualityCard", new { city = "Paris" })
         @await Component.InvokeAsync("FootballCard")
 
-        <!-- AI -->
-        <div class="dashboard-card placeholder-card">
+        <!-- AI Concierge (functional card) -->
+        <div class="dashboard-card ai-card">
             <div class="card-header">
                 <div class="card-title">
                     <div class="card-icon">
@@ -141,11 +141,29 @@
                     </div>
                     <h3>AI Concierge</h3>
                 </div>
+                <span class="card-status">Live</span>
             </div>
-            <div class="card-body placeholder-body">
-                <div class="placeholder-label">Coming soon</div>
-                <div class="placeholder-status">Smart travel suggestions</div>
+            <div class="card-body ai-card-body">
+                <p class="ai-card-tagline">Your personal travel assistant. Ask anything — destinations, tips, planning.</p>
+                <button type="button" class="ai-card-button" data-ai-open>
+                    <svg class="icon icon-sm" viewBox="0 0 24 24">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Ask Voyago AI
+                </button>
+                <div class="ai-card-examples">
+                    <span class="ai-example-chip" data-ai-example="What's the best time to visit Paris?">
+                        Best time to visit Paris?
+                    </span>
+                    <span class="ai-example-chip" data-ai-example="Top 5 things to do in Tokyo">
+                        Top 5 in Tokyo
+                    </span>
+                    <span class="ai-example-chip" data-ai-example="What should I pack for a winter trip to Iceland?">
+                        Pack for Iceland?
+                    </span>
+                </div>
             </div>
         </div>
+        
     </div>
 </section>
