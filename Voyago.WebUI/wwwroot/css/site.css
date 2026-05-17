@@ -2261,3 +2261,902 @@ button { cursor: pointer; border: none; background: none; }
         max-width: 90%;
     }
 }
+/* ========================================
+   SECTION CONTAINER (shared)
+   ======================================== */
+
+.section-container {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 var(--s-6);
+}
+
+/* ========================================
+   A. POPULAR DESTINATIONS
+   ======================================== */
+
+.destinations-section {
+    padding: var(--s-20) 0;
+    background: white;
+}
+
+.destinations-section .section-header {
+    text-align: center;
+    margin-bottom: var(--s-12);
+}
+
+.destinations-section .section-header h2 {
+    font-size: 2.25rem;
+    margin-bottom: var(--s-3);
+}
+
+.destinations-section .section-header p {
+    color: var(--text-light);
+    font-size: 1.0625rem;
+}
+
+.destinations-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-4);
+}
+
+.destination-card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    color: white;
+    text-decoration: none;
+    aspect-ratio: 4 / 3;
+    display: block;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.destination-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.destination-card:hover .destination-image img {
+    transform: scale(1.08);
+}
+
+.destination-image {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.destination-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 600ms ease;
+}
+
+.destination-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.1) 40%,
+    rgba(0, 0, 0, 0.75) 100%);
+}
+
+.destination-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--s-5);
+    z-index: 1;
+}
+
+.destination-name {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+    line-height: 1.1;
+}
+
+.destination-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.92);
+    font-weight: 500;
+}
+
+.destination-dot {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* ========================================
+   C. WHY VOYAGO
+   ======================================== */
+
+.why-section {
+    padding: var(--s-20) 0;
+    background: var(--bg-soft);
+}
+
+.why-section .section-header {
+    text-align: center;
+    margin-bottom: var(--s-12);
+}
+
+.why-section .section-header h2 {
+    font-size: 2.25rem;
+    margin-bottom: var(--s-3);
+}
+
+.why-section .section-header p {
+    color: var(--text-light);
+    font-size: 1.0625rem;
+}
+
+.why-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-4);
+}
+
+.why-card {
+    background: white;
+    border-radius: var(--radius-md);
+    padding: var(--s-6);
+    border: 1px solid var(--border-soft);
+    transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.why-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+}
+
+.why-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--s-4);
+}
+
+.why-icon .icon {
+    width: 28px;
+    height: 28px;
+}
+
+.why-icon-blue {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.why-icon-yellow {
+    background: var(--accent-light);
+    color: #B58A00;
+}
+
+.why-icon-green {
+    background: #d4edda;
+    color: #155724;
+}
+
+.why-icon-purple {
+    background: #e2d4f0;
+    color: #4a148c;
+}
+
+.why-card h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: var(--s-2);
+}
+
+.why-card p {
+    font-size: 0.875rem;
+    color: var(--text);
+    line-height: 1.55;
+    margin: 0;
+}
+
+/* ========================================
+   E. TRAVEL STATS
+   ======================================== */
+
+.stats-section {
+    background: var(--primary);
+    padding: var(--s-12) 0;
+    color: white;
+}
+
+.stats-grid {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--s-2);
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+}
+
+.stat-separator {
+    width: 1px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    flex: 0 0 1px;
+}
+
+/* ========================================
+   RESPONSIVE (sections)
+   ======================================== */
+
+@media (max-width: 1024px) {
+    .destinations-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .why-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .destinations-section,
+    .why-section {
+        padding: var(--s-12) 0;
+    }
+
+    .destinations-section .section-header h2,
+    .why-section .section-header h2 {
+        font-size: 1.75rem;
+    }
+
+    .destinations-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .why-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        flex-direction: column;
+        gap: var(--s-6);
+    }
+
+    .stat-separator {
+        display: none;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+    }
+}
+/* ========================================
+   H. TRIP INSPIRATION
+   ======================================== */
+
+.inspiration-section {
+    padding: var(--s-20) 0;
+    background: white;
+}
+
+.inspiration-section .section-header {
+    text-align: center;
+    margin-bottom: var(--s-12);
+}
+
+.inspiration-section .section-header h2 {
+    font-size: 2.25rem;
+    margin-bottom: var(--s-3);
+}
+
+.inspiration-section .section-header p {
+    color: var(--text-light);
+    font-size: 1.0625rem;
+}
+
+.inspiration-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: var(--s-4);
+    height: 540px;
+}
+
+.inspiration-card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.inspiration-card:nth-child(1) {
+    grid-row: 1 / span 2;
+}
+
+.inspiration-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.inspiration-card:hover .inspiration-image img {
+    transform: scale(1.08);
+}
+
+.inspiration-card:hover .inspiration-link {
+    gap: 8px;
+}
+
+.inspiration-image {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.inspiration-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.75) 100%);
+}
+
+.inspiration-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 600ms ease;
+}
+
+.inspiration-tag {
+    position: absolute;
+    top: var(--s-3);
+    left: var(--s-3);
+    z-index: 1;
+    padding: 4px var(--s-2);
+    background: var(--accent);
+    color: var(--ink);
+    border-radius: 4px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.inspiration-content {
+    position: relative;
+    z-index: 1;
+    margin-top: auto;
+    padding: var(--s-5);
+    color: white;
+}
+
+.inspiration-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.02em;
+    margin: 0 0 4px;
+    line-height: 1.15;
+}
+
+.inspiration-subtitle {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 var(--s-3);
+    font-weight: 500;
+}
+
+.inspiration-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--accent);
+    transition: gap 200ms ease;
+}
+
+.inspiration-link .icon {
+    width: 14px;
+    height: 14px;
+}
+
+/* First card (big one) — bigger title */
+.inspiration-card:nth-child(1) .inspiration-title {
+    font-size: 2rem;
+}
+
+.inspiration-card:nth-child(1) .inspiration-subtitle {
+    font-size: 1rem;
+}
+
+/* ========================================
+   D. PROPERTY TYPES
+   ======================================== */
+
+.property-types-section {
+    padding: var(--s-20) 0;
+    background: var(--bg-soft);
+}
+
+.property-types-section .section-header {
+    text-align: center;
+    margin-bottom: var(--s-12);
+}
+
+.property-types-section .section-header h2 {
+    font-size: 2.25rem;
+    margin-bottom: var(--s-3);
+}
+
+.property-types-section .section-header p {
+    color: var(--text-light);
+    font-size: 1.0625rem;
+}
+
+.property-types-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-4);
+}
+
+.property-type-card {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    padding: var(--s-5);
+    background: white;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: inherit;
+    transition: all 200ms ease;
+}
+
+.property-type-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+}
+
+.property-type-card:hover .property-type-arrow {
+    color: var(--primary);
+    transform: translateX(4px);
+}
+
+.property-type-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--primary-light);
+    color: var(--primary);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.property-type-icon .icon {
+    width: 24px;
+    height: 24px;
+}
+
+.property-type-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.property-type-name {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 2px;
+}
+
+.property-type-count {
+    font-size: 0.8125rem;
+    color: var(--text-light);
+    margin: 0;
+}
+
+.property-type-arrow {
+    color: var(--text-faded);
+    flex-shrink: 0;
+    transition: all 200ms ease;
+}
+
+/* ========================================
+   RESPONSIVE — Inspiration + Property Types
+   ======================================== */
+
+@media (max-width: 1024px) {
+    .inspiration-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        height: auto;
+    }
+
+    .inspiration-card:nth-child(1) {
+        grid-row: auto;
+        grid-column: 1 / -1;
+        aspect-ratio: 16 / 9;
+    }
+
+    .inspiration-card:not(:nth-child(1)) {
+        aspect-ratio: 4 / 3;
+    }
+
+    .property-types-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .inspiration-section,
+    .property-types-section {
+        padding: var(--s-12) 0;
+    }
+
+    .inspiration-section .section-header h2,
+    .property-types-section .section-header h2 {
+        font-size: 1.75rem;
+    }
+
+    .inspiration-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .inspiration-card:nth-child(1) {
+        grid-column: auto;
+        aspect-ratio: 16 / 10;
+    }
+
+    .inspiration-card:nth-child(1) .inspiration-title {
+        font-size: 1.5rem;
+    }
+
+    .inspiration-card:nth-child(1) .inspiration-subtitle {
+        font-size: 0.875rem;
+    }
+
+    .property-types-grid {
+        grid-template-columns: 1fr;
+    }
+}
+/* ========================================
+   H. TRIP INSPIRATION
+   ======================================== */
+
+.inspiration-section {
+    padding: var(--s-20) 0;
+    background: white;
+}
+
+.inspiration-section .section-header {
+    text-align: center;
+    margin-bottom: var(--s-12);
+}
+
+.inspiration-section .section-header h2 {
+    font-size: 2.25rem;
+    margin-bottom: var(--s-3);
+}
+
+.inspiration-section .section-header p {
+    color: var(--text-light);
+    font-size: 1.0625rem;
+}
+
+.inspiration-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: var(--s-4);
+    height: 540px;
+}
+
+.inspiration-card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.inspiration-card:nth-child(1) {
+    grid-row: 1 / span 2;
+}
+
+.inspiration-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.inspiration-card:hover .inspiration-image img {
+    transform: scale(1.08);
+}
+
+.inspiration-card:hover .inspiration-link {
+    gap: 8px;
+}
+
+.inspiration-image {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.inspiration-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.75) 100%);
+}
+
+.inspiration-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 600ms ease;
+}
+
+.inspiration-tag {
+    position: absolute;
+    top: var(--s-3);
+    left: var(--s-3);
+    z-index: 1;
+    padding: 4px var(--s-2);
+    background: var(--accent);
+    color: var(--ink);
+    border-radius: 4px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.inspiration-content {
+    position: relative;
+    z-index: 1;
+    margin-top: auto;
+    padding: var(--s-5);
+    color: white;
+}
+
+.inspiration-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.02em;
+    margin: 0 0 4px;
+    line-height: 1.15;
+}
+
+.inspiration-subtitle {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 var(--s-3);
+    font-weight: 500;
+}
+
+.inspiration-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--accent);
+    transition: gap 200ms ease;
+}
+
+.inspiration-link .icon {
+    width: 14px;
+    height: 14px;
+}
+
+/* First card (big one) — bigger title */
+.inspiration-card:nth-child(1) .inspiration-title {
+    font-size: 2rem;
+}
+
+.inspiration-card:nth-child(1) .inspiration-subtitle {
+    font-size: 1rem;
+}
+
+/* ========================================
+   D. PROPERTY TYPES
+   ======================================== */
+
+.property-types-section {
+    padding: var(--s-20) 0;
+    background: var(--bg-soft);
+}
+
+.property-types-section .section-header {
+    text-align: center;
+    margin-bottom: var(--s-12);
+}
+
+.property-types-section .section-header h2 {
+    font-size: 2.25rem;
+    margin-bottom: var(--s-3);
+}
+
+.property-types-section .section-header p {
+    color: var(--text-light);
+    font-size: 1.0625rem;
+}
+
+.property-types-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-4);
+}
+
+.property-type-card {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    padding: var(--s-5);
+    background: white;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: inherit;
+    transition: all 200ms ease;
+}
+
+.property-type-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+}
+
+.property-type-card:hover .property-type-arrow {
+    color: var(--primary);
+    transform: translateX(4px);
+}
+
+.property-type-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--primary-light);
+    color: var(--primary);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.property-type-icon .icon {
+    width: 24px;
+    height: 24px;
+}
+
+.property-type-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.property-type-name {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 2px;
+}
+
+.property-type-count {
+    font-size: 0.8125rem;
+    color: var(--text-light);
+    margin: 0;
+}
+
+.property-type-arrow {
+    color: var(--text-faded);
+    flex-shrink: 0;
+    transition: all 200ms ease;
+}
+
+/* ========================================
+   RESPONSIVE — Inspiration + Property Types
+   ======================================== */
+
+@media (max-width: 1024px) {
+    .inspiration-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        height: auto;
+    }
+
+    .inspiration-card:nth-child(1) {
+        grid-row: auto;
+        grid-column: 1 / -1;
+        aspect-ratio: 16 / 9;
+    }
+
+    .inspiration-card:not(:nth-child(1)) {
+        aspect-ratio: 4 / 3;
+    }
+
+    .property-types-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .inspiration-section,
+    .property-types-section {
+        padding: var(--s-12) 0;
+    }
+
+    .inspiration-section .section-header h2,
+    .property-types-section .section-header h2 {
+        font-size: 1.75rem;
+    }
+
+    .inspiration-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .inspiration-card:nth-child(1) {
+        grid-column: auto;
+        aspect-ratio: 16 / 10;
+    }
+
+    .inspiration-card:nth-child(1) .inspiration-title {
+        font-size: 1.5rem;
+    }
+
+    .inspiration-card:nth-child(1) .inspiration-subtitle {
+        font-size: 0.875rem;
+    }
+
+    .property-types-grid {
+        grid-template-columns: 1fr;
+    }
+}
