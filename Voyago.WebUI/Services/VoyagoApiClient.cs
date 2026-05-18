@@ -190,6 +190,50 @@ public class VoyagoApiClient : IVoyagoApiClient
             return null;
         }
     }
+    public async Task<HotelDetailDto?> GetHotelDetailAsync(
+        long hotelId,
+        string? arrivalDate,
+        string? departureDate,
+        int adults = 2,
+        int rooms = 1)
+    {
+        try
+        {
+            var query = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(arrivalDate))
+                query.Add($"arrivalDate={Uri.EscapeDataString(arrivalDate)}");
+
+            if (!string.IsNullOrWhiteSpace(departureDate))
+                query.Add($"departureDate={Uri.EscapeDataString(departureDate)}");
+
+            query.Add($"adults={adults}");
+            query.Add($"rooms={rooms}");
+
+            var url = $"api/booking/hotel/{hotelId}?{string.Join("&", query)}";
+
+            var response = await _httpClient.GetAsync(url);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                Console.WriteLine($"[VoyagoApiClient] Hotel {hotelId} not found");
+                return null;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"[VoyagoApiClient] GetHotelDetail returned {response.StatusCode}");
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<HotelDetailDto>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[VoyagoApiClient] GetHotelDetail error: {ex.Message}");
+            return null;
+        }
+    }
     
     
 }

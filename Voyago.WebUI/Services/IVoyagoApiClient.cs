@@ -15,4 +15,10 @@ public interface IVoyagoApiClient
     Task<List<FootballMatchDto>> GetTopMatchesAsync(int count = 4);
     Task<HotelSearchResponseDto?> SearchHotelsAsync(HotelSearchRequest request);
     Task<AIResponseDto?> AskAiAsync(string question);
+    Task<HotelDetailDto?> GetHotelDetailAsync(
+        long hotelId,
+        string? arrivalDate,
+        string? departureDate,
+        int adults = 2,
+        int rooms = 1);
 }

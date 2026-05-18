@@ -282,4 +282,144 @@ public class BookingService : IBookingService
             IsPreferred = p.IsPreferred
         };
     }
+    public async Task<HotelDetailDto?> GetHotelDetailAsync(
+    long hotelId,
+    string? arrivalDate,
+    string? departureDate,
+    int adults,
+    int rooms)
+{
+    if (hotelId <= 0)
+    {
+        _logger.LogWarning("Invalid hotel ID: {Id}", hotelId);
+        return null;
+    }
+
+    try
+    {
+        // ---- Date validation ----
+        if (!DateOnly.TryParse(arrivalDate, CultureInfo.InvariantCulture, out var arrival))
+        {
+            arrival = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(7));
+        }
+
+        if (!DateOnly.TryParse(departureDate, CultureInfo.InvariantCulture, out var departure))
+        {
+            departure = arrival.AddDays(3);
+        }
+
+        if (departure <= arrival)
+        {
+            departure = arrival.AddDays(1);
+        }
+
+        var arrivalStr = arrival.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+        var departureStr = departure.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+        // ---- Query parameters ----
+        var queryParams = new Dictionary<string, string>
+        {
+            ["hotel_id"] = hotelId.ToString(CultureInfo.InvariantCulture),
+            ["arrival_date"] = arrivalStr,
+            ["departure_date"] = departureStr,
+            ["adults"] = adults.ToString(CultureInfo.InvariantCulture),
+            ["room_qty"] = rooms.ToString(CultureInfo.InvariantCulture),
+            ["units"] = "metric",
+            ["temperature_unit"] = "c",
+            ["languagecode"] = "en-us",
+            ["currency_code"] = "USD"
+        };
+
+        var queryString = string.Join("&", queryParams
+            .Select(kv => $"{kv.Key}={Uri.EscapeDataString(kv.Value)}"));
+
+        var url = $"api/v1/hotels/getHotelDetails?{queryString}";
+
+        _logger.LogInformation("Hotel detail URL: {Url}", url);
+
+        var response = await _httpClient.GetAsync(url);
+
+        // ---- Defensive status code handling ----
+        if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+        {
+            _logger.LogWarning("Booking API rate limit hit for hotel {Id}", hotelId);
+            return null;
+        }
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorBody = await response.Content.ReadAsStringAsync();
+            _logger.LogError("Hotel detail returned {Status}: {Body}",
+                response.StatusCode, errorBody);
+            return null;
+        }
+
+        var json = await response.Content.ReadAsStringAsync();
+        var data = JsonSerializer.Deserialize<RapidHotelDetailResponseDto>(json);
+
+        // ---- API success but data missing (e.g. apartments, villas) ----
+        if (data is null || !data.Status || data.Data is null)
+        {
+            _logger.LogWarning(
+                "Hotel detail unavailable for ID {Id} (status={Status}). " +
+                "Possibly an apartment or property without detailed listing.",
+                hotelId, data?.Status);
+            return null;
+        }
+
+        return MapToDetailDto(data.Data);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Hotel detail fetch failed for ID {Id}", hotelId);
+        return null;
+    }
+}
+
+private static HotelDetailDto MapToDetailDto(RapidHotelDetailDataDto data)
+{
+    var stars = data.AccuratePropertyClass > 0
+        ? data.AccuratePropertyClass
+        : data.PropertyClass;
+
+    var description = data.RawData?.DescriptionTranslations?
+        .FirstOrDefault()?.Description ?? string.Empty;
+
+    var facilities = data.FacilitiesBlock?.Facilities?
+        .Where(f => !string.IsNullOrWhiteSpace(f.Name))
+        .Select(f => f.Name!)
+        .Distinct()
+        .Take(20)
+        .ToList() ?? new List<string>();
+
+    var photos = data.RawData?.PhotoUrls?
+        .Where(p => !string.IsNullOrWhiteSpace(p))
+        .ToList() ?? new List<string>();
+
+    var pricePerNight = data.CompositePriceBreakdown?.GrossAmountPerNight;
+    var totalPrice = data.CompositePriceBreakdown?.GrossAmountTotal;
+
+    return new HotelDetailDto
+    {
+        HotelId = data.HotelId,
+        Name = data.HotelName ?? "Unknown Hotel",
+        Address = data.Address ?? string.Empty,
+        City = data.CityTranslated ?? data.City ?? string.Empty,
+        Country = data.CountryTranslated ?? string.Empty,
+        Zip = data.Zip ?? string.Empty,
+        Latitude = data.Latitude,
+        Longitude = data.Longitude,
+        StarRating = stars,
+        ReviewScore = data.ReviewScore,
+        ReviewScoreWord = data.ReviewScoreWord ?? string.Empty,
+        ReviewCount = data.ReviewCount,
+        PhotoUrls = photos,
+        Description = description,
+        Facilities = facilities,
+        PricePerNight = pricePerNight is not null ? (decimal?)pricePerNight.Value : null,
+        TotalPrice = totalPrice is not null ? (decimal?)totalPrice.Value : null,
+        Currency = pricePerNight?.Currency ?? "USD",
+        BookingUrl = data.Url ?? string.Empty
+    };
+}
 }

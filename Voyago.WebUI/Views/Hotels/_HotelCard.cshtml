@@ -1,21 +1,22 @@
 @model Voyago.WebUI.Dtos.HotelSummaryDto
 
 @{
-    // ViewBag'den search request'i al — Booking URL için tarih ve kişi sayısı lazım
     var searchRequest = ViewBag.SearchRequest as Voyago.WebUI.Dtos.HotelSearchRequest;
-    var bookingUrl = Model.BuildBookingUrl(
-        searchRequest?.ArrivalDate,
-        searchRequest?.DepartureDate,
-        searchRequest?.Adults ?? 2,
-        searchRequest?.Rooms ?? 1
-    );
+
+    var detailQuery = new List<string>();
+    if (!string.IsNullOrWhiteSpace(searchRequest?.ArrivalDate))
+        detailQuery.Add($"arrivalDate={Uri.EscapeDataString(searchRequest.ArrivalDate)}");
+    if (!string.IsNullOrWhiteSpace(searchRequest?.DepartureDate))
+        detailQuery.Add($"departureDate={Uri.EscapeDataString(searchRequest.DepartureDate)}");
+    detailQuery.Add($"adults={searchRequest?.Adults ?? 2}");
+    detailQuery.Add($"rooms={searchRequest?.Rooms ?? 1}");
+
+    var detailUrl = $"/Hotels/Detail/{Model.HotelId}?{string.Join("&", detailQuery)}";
 }
 
-<a href="@bookingUrl"
-   target="_blank"
-   rel="noopener noreferrer"
+<a href="@detailUrl"
    class="hotel-card-link"
-   title="View @Model.Name on Booking.com">
+   title="View @Model.Name details">
     <article class="hotel-card">
         <!-- Photo -->
         <div class="hotel-card-photo-wrapper">

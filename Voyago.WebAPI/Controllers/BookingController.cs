@@ -27,4 +27,22 @@ public class BookingController : ControllerBase
 
         return Ok(result);
     }
+    [HttpGet("hotel/{hotelId:long}")]
+    public async Task<IActionResult> GetHotelDetail(
+        long hotelId,
+        [FromQuery] string? arrivalDate,
+        [FromQuery] string? departureDate,
+        [FromQuery] int adults = 2,
+        [FromQuery] int rooms = 1)
+    {
+        var result = await _bookingService.GetHotelDetailAsync(
+            hotelId, arrivalDate, departureDate, adults, rooms);
+
+        if (result is null)
+        {
+            return NotFound(new { message = "Hotel not found." });
+        }
+
+        return Ok(result);
+    }
 }

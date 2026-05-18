@@ -36,4 +36,28 @@ public class HotelsController : Controller
 
         return View(response);
     }
+    [Route("Hotels/Detail/{hotelId:long}")]
+    public async Task<IActionResult> Detail(
+        long hotelId,
+        [FromQuery] string? arrivalDate,
+        [FromQuery] string? departureDate,
+        [FromQuery] int adults = 2,
+        [FromQuery] int rooms = 1)
+    {
+        var hotel = await _apiClient.GetHotelDetailAsync(
+            hotelId, arrivalDate, departureDate, adults, rooms);
+
+        if (hotel is null)
+        {
+            TempData["Error"] = "Sorry, we couldn't load this hotel's details. It may be temporarily unavailable.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        ViewBag.ArrivalDate = arrivalDate;
+        ViewBag.DepartureDate = departureDate;
+        ViewBag.Adults = adults;
+        ViewBag.Rooms = rooms;
+
+        return View(hotel);
+    }
 }

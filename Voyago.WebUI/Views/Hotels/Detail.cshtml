@@ -1,0 +1,225 @@
+@model Voyago.WebUI.Dtos.HotelDetailDto
+
+@{
+    ViewData["Title"] = Model.Name;
+    var arrivalDate = ViewBag.ArrivalDate as string;
+    var departureDate = ViewBag.DepartureDate as string;
+    var adults = (int)(ViewBag.Adults ?? 2);
+    var rooms = (int)(ViewBag.Rooms ?? 1);
+
+    // Build "Back to search" URL
+    var backToSearch = $"/Hotels?destination={Uri.EscapeDataString(Model.City)}";
+    if (!string.IsNullOrWhiteSpace(arrivalDate))
+        backToSearch += $"&arrivalDate={Uri.EscapeDataString(arrivalDate)}";
+    if (!string.IsNullOrWhiteSpace(departureDate))
+        backToSearch += $"&departureDate={Uri.EscapeDataString(departureDate)}";
+    backToSearch += $"&adults={adults}&rooms={rooms}";
+}
+
+<div class="hotel-detail-page">
+
+    <!-- Breadcrumb -->
+    <nav class="hotel-detail-breadcrumb">
+        <a href="/">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        <a href="@backToSearch">@Model.City hotels</a>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">@Model.Name</span>
+    </nav>
+
+    <!-- Header -->
+    <header class="hotel-detail-header">
+        <div class="hotel-detail-title-row">
+            <div>
+                @if (Model.StarRating > 0)
+                {
+                    <div class="hotel-detail-stars">
+                        @for (int i = 0; i < Model.StarRating; i++)
+                        {
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                        }
+                    </div>
+                }
+                <h1 class="hotel-detail-name">@Model.Name</h1>
+                <a href="@Model.GoogleMapsUrl" target="_blank" rel="noopener" class="hotel-detail-address">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    @Model.FullAddress
+                    <span class="hotel-detail-map-link">Show on map →</span>
+                </a>
+            </div>
+
+            @if (Model.ReviewScore > 0)
+            {
+                <div class="hotel-detail-review-box">
+                    <div class="hotel-detail-review-text">
+                        <div class="hotel-detail-review-word">@Model.ReviewScoreWord</div>
+                        <div class="hotel-detail-review-count">@Model.ReviewCount reviews</div>
+                    </div>
+                    <div class="hotel-detail-review-score @Model.ReviewScoreClass">
+                        @Model.ReviewScoreFormatted
+                    </div>
+                </div>
+            }
+        </div>
+    </header>
+
+    <!-- Photo Gallery -->
+    @if (Model.PhotoUrls.Count > 0)
+    {
+        <section class="hotel-detail-gallery">
+            <div class="gallery-main">
+                <img src="@Model.GetMainPhoto()"
+                     alt="@Model.Name"
+                     class="gallery-main-img"
+                     loading="eager" />
+            </div>
+            @if (Model.PhotoUrls.Count > 1)
+            {
+                <div class="gallery-thumbs">
+                    @for (int i = 1; i < Math.Min(Model.PhotoUrls.Count, 5); i++)
+                    {
+                        <div class="gallery-thumb">
+                            <img src="@Model.GetHighResPhoto(i)"
+                                 alt="@Model.Name photo @(i + 1)"
+                                 loading="lazy" />
+                        </div>
+                    }
+                </div>
+            }
+        </section>
+    }
+
+    <!-- Main content + Sidebar -->
+    <div class="hotel-detail-layout">
+
+        <!-- Left: Description + Facilities -->
+        <main class="hotel-detail-main">
+
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
+            {
+                <section class="hotel-detail-section">
+                    <h2>About this property</h2>
+                    <p class="hotel-detail-description">@Model.Description</p>
+                </section>
+            }
+
+            @if (Model.Facilities.Count > 0)
+            {
+                <section class="hotel-detail-section">
+                    <h2>Facilities</h2>
+                    <div class="hotel-detail-facilities">
+                        @foreach (var facility in Model.Facilities)
+                        {
+                            <div class="facility-item">
+                                <svg class="icon icon-sm" viewBox="0 0 24 24">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span>@facility</span>
+                            </div>
+                        }
+                    </div>
+                </section>
+            }
+
+            <!-- Map preview -->
+            <section class="hotel-detail-section">
+                <h2>Location</h2>
+                <p class="hotel-detail-location-text">@Model.FullAddress</p>
+                <a href="@Model.GoogleMapsUrl" target="_blank" rel="noopener" class="hotel-detail-map-button">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Open in Google Maps
+                </a>
+            </section>
+
+        </main>
+
+        <!-- Right: Booking sidebar -->
+        <aside class="hotel-detail-sidebar">
+            <div class="booking-card">
+
+                @if (Model.HasPrice)
+                {
+                    <div class="booking-price">
+                        <span class="booking-price-amount">@Model.CurrencySymbol@Model.PricePerNightRounded</span>
+                        <span class="booking-price-note">per night</span>
+                    </div>
+
+                    @if (Model.TotalPriceRounded.HasValue)
+                    {
+                        <div class="booking-total">
+                            Total: <strong>@Model.CurrencySymbol@Model.TotalPriceRounded</strong>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="booking-no-price">
+                        <p>Live pricing on Booking.com</p>
+                    </div>
+                }
+
+                <!-- Search context -->
+                @if (!string.IsNullOrWhiteSpace(arrivalDate) && !string.IsNullOrWhiteSpace(departureDate))
+                {
+                    <div class="booking-dates">
+                        <div class="booking-date-item">
+                            <span class="booking-date-label">Check in</span>
+                            <span class="booking-date-value">@arrivalDate</span>
+                        </div>
+                        <div class="booking-date-arrow">→</div>
+                        <div class="booking-date-item">
+                            <span class="booking-date-label">Check out</span>
+                            <span class="booking-date-value">@departureDate</span>
+                        </div>
+                    </div>
+
+                    <div class="booking-guests">
+                        @adults @(adults == 1 ? "adult" : "adults") · @rooms @(rooms == 1 ? "room" : "rooms")
+                    </div>
+                }
+
+                <!-- BOOK NOW CTA -->
+                <a href="@Model.BookingUrl"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="booking-cta">
+                    Book on Booking.com
+                    <svg class="icon icon-sm" viewBox="0 0 24 24">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+
+                <p class="booking-disclaimer">
+                    You'll be redirected to Booking.com to complete your reservation. Prices and availability are managed by Booking.com.
+                </p>
+
+                <!-- Trust badges -->
+                <div class="booking-trust">
+                    <div class="trust-badge">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24">
+                            <path d="M9 12l2 2 4-4"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                        Free cancellation on most rooms
+                    </div>
+                    <div class="trust-badge">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24">
+                            <path d="M9 12l2 2 4-4"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                        No booking fees
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
